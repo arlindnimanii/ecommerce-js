@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop | e-commerce</title>
+    <link rel="stylesheet" href="./assets/css/bootstrap.min.css" />
+    <style>
+        .card {
+            overflow: hidden;
+        }
+
+        .card img {
+            width: auto !important;
+            height: 120px;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .card h5 {
+            line-height: 32px;
+            height: 64px;
+            overflow: hidden;
+        }
+
+        .card .description {
+            margin-top: 15px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg bg-light">
+        <div class="container">
+          <a class="navbar-brand" href="#">e-commerce</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link" aria-current="page" href="index.html">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="shop.html">Shop</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="cart.html">Cart (3)</a>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Dashboard
+                </a>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="#">Profile</a></li>
+                  <li><a class="dropdown-item" href="#">Sign out</a></li>
+                </ul>
+              </li>
+            </ul>
+            <form class="d-flex" role="search">
+              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+              <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
+          </div>
+        </div>
+    </nav>
+
+    <section class="filters py-3">
+        <div class="container d-md-flex justify-content-md-between">
+            <h3>Product: <span id="title"></span></h3>
+        </div>
+    </section>
+
+    <section class="product bg-light py-5">
+        <div class="container">
+            <div class="row" id="product">
+            </div>
+        </div>
+    </section>
+
+    <footer class="py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12">
+                    <h2>e-commerce</h2>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 d-md-flex justify-content-md-center">
+                    <ul class="nav">
+                        <li class="nav-item"><a href="index.html">Home</a></li>
+                        <li class="nav-item mx-4"><a href="shop.html">Shop</a></li>
+                        <li class="nav-item"><a href="cart.html">Cart</a></li>
+                    </ul>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 d-md-flex justify-content-md-end">
+                    <ul class="nav">
+                        <li class="nav-item"><a href="#">Facebook</a></li>
+                        <li class="nav-item ms-4"><a href="#">Instagram</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="./assets/js/bootstrap.bundle.min.js"></script>
+    <script type="module">
+        import {getProductByID} from './modules/Products.js'
+        import getItemFromURL from './modules/Helpers.js'
+        
+        const id = getItemFromURL(document.URL, 'id')
+        const product_div = document.getElementById('product')
+
+        if(id !== null) {
+            getProductByID(product_div, id)
+        } else {
+            product_div.innerHTML = 'Product was not found!'
+        }
+    </script>
+</body>
+</html>

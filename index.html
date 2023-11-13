@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home | e-commerce</title>
+    <link rel="stylesheet" href="./assets/css/bootstrap.min.css" />
+    <style>
+        .card img {
+            width: auto !important;
+            height: 150px;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .card h5 {
+            line-height: 32px;
+            height: 64px;
+            overflow: hidden;
+        }
+
+        .card .description {
+            margin-top: 15px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg bg-light">
+        <div class="container">
+          <a class="navbar-brand" href="#">e-commerce</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="index.html">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="shop.html">Shop</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="cart.html">Cart (3)</a>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Dashboard
+                </a>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="#">Profile</a></li>
+                  <li><a class="dropdown-item" href="#">Sign out</a></li>
+                </ul>
+              </li>
+            </ul>
+            <form class="d-flex" role="search">
+              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+              <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
+          </div>
+        </div>
+    </nav>
+
+    <div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <img src="./assets/img/slides/1.jpg" class="d-block w-100" alt="...">
+          </div>
+          <div class="carousel-item">
+            <img src="./assets/img/slides/2.jpg" class="d-block w-100" alt="...">
+          </div>
+          <div class="carousel-item">
+            <img src="./assets/img/slides/3.jpg" class="d-block w-100" alt="...">
+          </div>
+        </div>
+    </div>
+
+    <section class="products my-5">
+        <div class="container">
+            <h2 class="text-center">Latest products</h2>
+            <p class="text-center mb-5">
+                Quae nostrum blanditiis natus, incidunt repellat suscipit ad quos odio soluta dolores at? 
+            </p>
+            <div class="row" id="products">
+            </div>
+            <div class="text-center mt-4">
+                <a href="shop.html" class="btn btn-sm btn-outline-primary">Browse products</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="about-us bg-light py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12">
+                    <img src="./assets/img/about-us.jpg" class="img-fluid" alt="e-commerce" />
+                </div>
+                <div class="col-xl-7 offset-xl-1 col-lg-7 offset-lg-1 col-md-7 offset-md-1 col-sm-12 offset-sm-0">
+                    <h3>e-commerce</h3>
+                    <p class="py-2">
+                        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Autem nemo adipisci eos illo laudantium praesentium, excepturi fuga. Nulla eligendi, illum voluptatem ullam soluta cumque impedit qui? Ea, expedita! Quis, vero?
+                    </p>
+                    <p>
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Amet animi laborum sequi, quisquam placeat ab esse ratione, quibusdam praesentium perspiciatis dicta explicabo ea optio cum sed, natus nobis consequatur aut!
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12">
+                    <h2>e-commerce</h2>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 d-flex justify-content-center">
+                    <ul class="nav">
+                        <li class="nav-item"><a href="index.html">Home</a></li>
+                        <li class="nav-item mx-4"><a href="shop.html">Shop</a></li>
+                        <li class="nav-item"><a href="cart.html">Cart</a></li>
+                    </ul>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 d-flex justify-content-end">
+                    <ul class="nav">
+                        <li class="nav-item"><a href="#">Facebook</a></li>
+                        <li class="nav-item ms-4"><a href="#">Instagram</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="./assets/js/bootstrap.bundle.min.js"></script>
+    <script type="module">
+        import {getProducts} from './modules/Products.js'
+        const products_div = document.getElementById('products')
+        
+        getProducts(products_div, {limit: 4, sort: null})
+    </script>
+</body>
+</html>
