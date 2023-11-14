@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart | e-commerce</title>
+    <link rel="stylesheet" href="./assets/css/bootstrap.min.css" />
+    <style>
+        .card {
+            overflow: hidden;
+        }
+
+        .card img {
+            width: auto !important;
+            height: 120px;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .card h5 {
+            line-height: 32px;
+            height: 64px;
+            overflow: hidden;
+        }
+
+        .card .description {
+            margin-top: 15px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg bg-light">
+        <div class="container">
+          <a class="navbar-brand" href="#">e-commerce</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link" aria-current="page" href="index.html">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="shop.html">Shop</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" href="cart.html" id="cart-lbl">Cart</a>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Dashboard
+                </a>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="orders.html">Orders</a></li>
+                  <li><a class="dropdown-item" href="#">Sign out</a></li>
+                </ul>
+              </li>
+            </ul>
+            <input class="form-control w-25" id="search" type="search" placeholder="Search" aria-label="Search">
+          </div>
+        </div>
+    </nav>
+
+    <section class="filters py-3">
+        <div class="container d-md-flex justify-content-md-between">
+            <h3>Cart</h3>
+            <div>
+                <button class="btn bnt-sm btn-outline-primary" id="checkout" data-bs-toggle="modal" data-bs-target="#checkoutModal">Checkout</button>
+                <button class="btn bnt-sm btn-outline-danger" id="empty-cart">Empty cart</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="cart bg-light py-5">
+        <div class="container">
+            <div class="table-responsive" id="cart-items">
+            </div>
+        </div>
+    </section>
+
+    <footer class="py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12">
+                    <h2>e-commerce</h2>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 d-md-flex justify-content-md-center">
+                    <ul class="nav">
+                        <li class="nav-item"><a href="index.html">Home</a></li>
+                        <li class="nav-item mx-4"><a href="shop.html">Shop</a></li>
+                        <li class="nav-item"><a href="cart.html">Cart</a></li>
+                    </ul>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 d-md-flex justify-content-md-end">
+                    <ul class="nav">
+                        <li class="nav-item"><a href="#">Facebook</a></li>
+                        <li class="nav-item ms-4"><a href="#">Instagram</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modal -->
+    <div class="modal fade" id="checkoutModal" tabindex="-1" aria-labelledby="checkoutModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h1 class="modal-title fs-5" id="checkoutModalLabel">Checkout</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="checkout-form">
+                    <div class="form-group mb-3">
+                        <input type="text" name="fullname" id="fullname" placeholder="Fullname" class="form-control" />
+                    </div>
+                    <div class="form-group mb-3">
+                        <input type="text" name="phone" id="phone" placeholder="Phone" class="form-control" />
+                    </div>
+                    <div class="form-group mb-3">
+                        <input type="email" name="email" id="email" placeholder="Email" class="form-control" />
+                    </div>
+                    <div class="form-group mb-3">
+                        <textarea name="address" id="address" class="form-control" placeholder="Address"></textarea> 
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" id="checkout-btn">Submit</button>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <script src="./assets/js/bootstrap.bundle.min.js"></script>
+    <script type="module">
+        import {getCartItems, add, remove, empty} from './modules/Cart.js'
+        
+        const search_input = document.querySelector('#search')
+        const empty_cart_btn = document.querySelector('#empty-cart')
+
+        const cart = getCartItems()
+
+        document.querySelector('#cart-lbl').innerHTML = `Cart (${cart.length})`
+
+        if(cart.length > 0) {
+            let cart_html = `
+            <table class="table table-bordered">
+                <tr>
+                    <th>#</th>
+                    <th>Title</th>
+                    <th>Price</th>
+                </tr>
+            `
+
+            cart.forEach(item => {
+                cart_html += `
+                <tr>
+                    <td>${item.id}</td>
+                    <td>${item.title}</td>
+                    <td>${item.qty}</td>
+                    <td>${item.price.toFixed(2)} EUR</td>
+                    <td>${(item.price * item.qty).toFixed(2)} EUR</td>
+                </td>
+                `
+            })
+
+            cart_html += '</table>'
+
+            document.querySelector('#cart-items').innerHTML = cart_html
+        } else {
+            document.querySelector('#cart-items').innerHTML = 'Cart is empty!'
+        }
+
+
+        empty_cart_btn.addEventListener('click', e => {
+            e.preventDefault()
+            empty()
+        })
+        
+
+        search_input.addEventListener('keyup', e => {
+          e.preventDefault()
+
+          switch(e.keyCode) {
+            case 13:
+              window.location.href = `http://127.0.0.1:5500/shop.html?keyword=${e.target.value}`
+              break
+          }
+        })
+    </script>
+</body>
+</html>

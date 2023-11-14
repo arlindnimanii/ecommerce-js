@@ -46,22 +46,19 @@
                 <a class="nav-link active" href="shop.html">Shop</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="cart.html">Cart (3)</a>
+                <a class="nav-link" href="cart.html">Cart</a>
               </li>
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                   Dashboard
                 </a>
                 <ul class="dropdown-menu">
-                  <li><a class="dropdown-item" href="#">Profile</a></li>
+                    <li><a class="dropdown-item" href="orders.html">Orders</a></li>
                   <li><a class="dropdown-item" href="#">Sign out</a></li>
                 </ul>
               </li>
             </ul>
-            <form class="d-flex" role="search">
-              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-              <button class="btn btn-outline-success" type="submit">Search</button>
-            </form>
+            <input class="form-control w-25" id="search" type="search" placeholder="Search" aria-label="Search">
           </div>
         </div>
     </nav>
@@ -110,14 +107,37 @@
 
     <script src="./assets/js/bootstrap.bundle.min.js"></script>
     <script type="module">
-        import {getProducts} from './modules/Products.js'
+        import {getProducts, searchProducts} from './modules/Products.js'
+        import getItemFromURL from './modules/Helpers.js'
+
         const products_div = document.getElementById('products')
+        let keyword = getItemFromURL(document.URL, 'keyword')
+        const search_input = document.querySelector('#search')
         
-        getProducts(products_div, {limit: null, sort: null})
+        if(keyword !== null && keyword.length > 0) {
+            search_input.value = keyword
+        }
+
+        console.log(keyword)
+        
+        if(keyword === null)
+            getProducts(products_div, {limit: null, sort: null})
+        else
+            searchProducts(products_div, keyword)
     
 
         document.querySelector('select').addEventListener('change', (e) => {
             getProducts(products_div, {limit: null, sort: e.target.value})
+        })
+
+        search_input.addEventListener('keyup', e => {
+          e.preventDefault()
+
+          switch(e.keyCode) {
+            case 13:
+              window.location.href = `http://127.0.0.1:5500/shop.html?keyword=${e.target.value}`
+              break
+          }
         })
     </script>
 </body>

@@ -46,14 +46,14 @@
                 <a class="nav-link" href="shop.html">Shop</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="cart.html">Cart (3)</a>
+                <a class="nav-link" href="cart.html">Cart</a>
               </li>
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                   Dashboard
                 </a>
                 <ul class="dropdown-menu">
-                  <li><a class="dropdown-item" href="#">Profile</a></li>
+                    <li><a class="dropdown-item" href="orders.html">Orders</a></li>
                   <li><a class="dropdown-item" href="#">Sign out</a></li>
                 </ul>
               </li>
@@ -103,9 +103,11 @@
     </footer>
 
     <script src="./assets/js/bootstrap.bundle.min.js"></script>
+    <script src="./assets/js/dynamicListener.min.js"></script>
     <script type="module">
         import {getProductByID} from './modules/Products.js'
         import getItemFromURL from './modules/Helpers.js'
+        import {add, remove, empty} from './modules/Cart.js'
         
         const id = getItemFromURL(document.URL, 'id')
         const product_div = document.getElementById('product')
@@ -115,6 +117,24 @@
         } else {
             product_div.innerHTML = 'Product was not found!'
         }
+
+        function f(e) {
+            e.preventDefault()
+            console.log('form was submited')
+        }
+
+        // addDynamicEventListener(document.body, 'click', '.myClass, li', function (e) {
+        addDynamicEventListener(document.body, 'submit', '#add-to-cart', e => {
+                e.preventDefault()
+                const product_id = e.target.elements[1 ].value
+                const qty = e.target.elements[0].value
+                add(product_id, qty)
+                
+                e.target.elements[0].value = 1
+                alert('Product was added to cart')
+        })
+
+        
     </script>
 </body>
 </html>

@@ -55,7 +55,7 @@ function composeProductHTML(product) {
             <p><span class="badge bg-primary">${product.category}</span></p>
             <p>${product.description}</p>
             <p class="mt-4"><b>${product.price} EUR</p>
-            <form class="d-flex justify-content-start">
+            <form class="d-flex justify-content-start" id="add-to-cart">
                 <input type="number" name="qty" value="1" min="0" max="10" class="form-control w-25 me-2" />
                 <input type="hidden" name="id" value="${product.id}" />
                 <button type="submit" class="btn btn-sm btn-primary">Add to cart</button>
@@ -79,5 +79,18 @@ export function getProductByID(div, id) {
     .then(response => response.json())
     .then(data => {
         div.innerHTML = composeProductHTML(data)
+    })
+}
+
+export function searchProducts(div, keyword) {
+    fetch('https://fakestoreapi.com/products')
+    .then(response => response.json())
+    .then(data => {
+        const results = data.filter(product => product.title.toLowerCase().includes(keyword.toLowerCase()))
+
+        if(results.length > 0)
+            div.innerHTML = composeProductsHTML(results)
+        else 
+            div.innerHTML = `<p>No peoduct was found with keyword: <b>${keyword}</b></p>`
     })
 }
