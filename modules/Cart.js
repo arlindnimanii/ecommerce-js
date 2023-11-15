@@ -1,7 +1,11 @@
 export function getCartItems() {
-    const cart = localStorage.getItem('cart') ?? null
-    if(cart === null) return []
-    return JSON.parse(cart)
+    const cart = localStorage.getItem('cart') ?? []
+    return (cart.length > 0) ? JSON.parse(cart) : []
+}
+
+export function getOrders() {
+    const orders = localStorage.getItem('orders') ?? []
+    return (orders.length > 0) ? JSON.parse(orders) : []
 }
 
 
@@ -36,4 +40,14 @@ export function empty() {
     localStorage.removeItem('cart')
 }
 
+export function checkout(data) {
+    const cart = getCartItems()
+    const order = {
+        ...data,
+        'total': cart.reduce((s, i) => s + (i.price * i.qty), 0)
+    }
+    localStorage.setItem('orders', JSON.stringify([...getOrders(), order]))
+    localStorage.removeItem('cart')
+    return true
+}
 

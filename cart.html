@@ -48,14 +48,8 @@
               <li class="nav-item">
                 <a class="nav-link active" href="cart.html" id="cart-lbl">Cart</a>
               </li>
-              <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  Dashboard
-                </a>
-                <ul class="dropdown-menu">
-                  <li><a class="dropdown-item" href="orders.html">Orders</a></li>
-                  <li><a class="dropdown-item" href="#">Sign out</a></li>
-                </ul>
+              <li class="nav-item">
+                <a class="nav-link" href="orders.html">Orders</a>
               </li>
             </ul>
             <input class="form-control w-25" id="search" type="search" placeholder="Search" aria-label="Search">
@@ -111,36 +105,37 @@
             <h1 class="modal-title fs-5" id="checkoutModalLabel">Checkout</h1>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
+            <form action="#" id="checkout_frm">
             <div class="modal-body">
-                <form id="checkout-form">
-                    <div class="form-group mb-3">
-                        <input type="text" name="fullname" id="fullname" placeholder="Fullname" class="form-control" />
-                    </div>
-                    <div class="form-group mb-3">
-                        <input type="text" name="phone" id="phone" placeholder="Phone" class="form-control" />
-                    </div>
-                    <div class="form-group mb-3">
-                        <input type="email" name="email" id="email" placeholder="Email" class="form-control" />
-                    </div>
-                    <div class="form-group mb-3">
-                        <textarea name="address" id="address" class="form-control" placeholder="Address"></textarea> 
-                    </div>
-                </form>
+                <div class="form-group mb-3">
+                    <input type="text" name="fullname" id="fullname" required placeholder="Fullname" class="form-control" />
+                </div>
+                <div class="form-group mb-3">
+                    <input type="text" name="phone" id="phone" required placeholder="Phone" class="form-control" />
+                </div>
+                <div class="form-group mb-3">
+                    <input type="email" name="email" id="email" required placeholder="Email" class="form-control" />
+                </div>
+                <div class="form-group mb-3">
+                    <textarea name="address" id="address" required class="form-control" placeholder="Address"></textarea> 
+                </div>
             </div>
             <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary" id="checkout-btn">Submit</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Submit</button>
             </div>
+            </form>
         </div>
         </div>
     </div>
 
     <script src="./assets/js/bootstrap.bundle.min.js"></script>
     <script type="module">
-        import {getCartItems, add, remove, empty} from './modules/Cart.js'
+        import {getCartItems, add, remove, empty, checkout} from './modules/Cart.js'
         
         const search_input = document.querySelector('#search')
         const empty_cart_btn = document.querySelector('#empty-cart')
+        const checkout_frm = document.querySelector('#checkout_frm')
 
         const cart = getCartItems()
 
@@ -179,6 +174,7 @@
         empty_cart_btn.addEventListener('click', e => {
             e.preventDefault()
             empty()
+            window.location.href = `http://127.0.0.1:5500/cart.html`
         })
         
 
@@ -190,6 +186,36 @@
               window.location.href = `http://127.0.0.1:5500/shop.html?keyword=${e.target.value}`
               break
           }
+        })
+
+        function isLoggedIn() {
+            const is_loggedin = localStorage.getItem('is_loggedin') ?? 0
+            return Boolean(is_loggedin)
+        }
+
+        checkout_frm.addEventListener('submit', e => {
+            e.preventDefault()
+
+            const form = e.target.elements
+
+            const data = {
+                'fullname': form['fullname'].value,
+                'email': form['email'].value,
+                'phone': form['phone'].value,
+                'address': form['address'].value
+            }
+
+            if(isLoggedIn()) {
+                data.user = localStorage.getItem('email')
+                
+                if(checkout(data)) {
+                    window.location.href = 'orders.html'
+                } else {
+                    alert('Something want wrong!')
+                }
+            } else {
+                alert('Please login first!')
+            }
         })
     </script>
 </body>

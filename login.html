@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home | e-commerce</title>
+    <link rel="stylesheet" href="./assets/css/bootstrap.min.css" />
+    <style>
+        .card img {
+            width: auto !important;
+            height: 150px;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .card h5 {
+            line-height: 32px;
+            height: 64px;
+            overflow: hidden;
+        }
+
+        .card .description {
+            margin-top: 15px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg bg-light">
+        <div class="container">
+          <a class="navbar-brand" href="#">e-commerce</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="index.html">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="shop.html">Shop</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="cart.html">Cart</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="orders.html">Orders</a>
+              </li>
+            </ul>
+            <input class="form-control w-25" type="search" id="search" placeholder="Search" aria-label="Search" />
+          </div>
+        </div>
+    </nav>
+
+    <section class="login py-5">
+        <div class="container">
+            <h3 class="text-center mb-4">Login</h3>
+            <div class="row">
+                <div class="col-xl-6 offset-xl-3 col-lg-6 offset-lg-3 col-md-6 offset-md-3 col-sm-12 offset-sm-0">
+                    <form action="#" id="login_frm">
+                        <div class="form-group mb-2">
+                            <label for="email">Email</label>
+                            <input type="email" name="email" id="email" required class="form-control" placeholder="ex. john.smith@gmail.com" />
+                        </div>
+                        <div class="form-group mb-2">
+                            <label for="password">Password</label>
+                            <input type="password" name="password" id="password" pattern="[a-zA-Z0-9]{6,}" required class="form-control" />
+                        </div>
+                        <button type="submit" class="btn btn-sm btn-outline-primary">Login</button>
+                        <a href="register.html" class="btn btn-sm btn-outline-link">Create account</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12">
+                    <h2>e-commerce</h2>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 d-flex justify-content-center">
+                    <ul class="nav">
+                        <li class="nav-item"><a href="index.html">Home</a></li>
+                        <li class="nav-item mx-4"><a href="shop.html">Shop</a></li>
+                        <li class="nav-item"><a href="cart.html">Cart</a></li>
+                    </ul>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 d-flex justify-content-end">
+                    <ul class="nav">
+                        <li class="nav-item"><a href="#">Facebook</a></li>
+                        <li class="nav-item ms-4"><a href="#">Instagram</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="./assets/js/bootstrap.bundle.min.js"></script>
+    <script type="module">
+        import {login} from './modules/Auth.js'
+        const login_frm = document.querySelector('#login_frm')
+
+        login_frm.addEventListener('submit', e => {
+            e.preventDefault()
+            const form = e.target.elements
+
+            const data = {
+                'email': form['email'].value,
+                'password': form['password'].value
+            }
+
+            console.log(data)
+
+            if(login(data)) {
+                localStorage.setItem('email', form['email'].value)
+                localStorage.setItem('is_loggedin', 1)
+                window.location.href = 'orders.html'
+            } else {
+                alert('Incorrect credentials!')
+            }
+        })
+    </script>
+</body>
+</html>

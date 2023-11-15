@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shop | e-commerce</title>
+    <title>Cart | e-commerce</title>
     <link rel="stylesheet" href="./assets/css/bootstrap.min.css" />
     <style>
         .card {
@@ -43,13 +43,19 @@
                 <a class="nav-link" aria-current="page" href="index.html">Home</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link active" href="shop.html">Shop</a>
+                <a class="nav-link" href="shop.html">Shop</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="cart.html">Cart</a>
+                <a class="nav-link" href="cart.html" id="cart-lbl">Cart</a>
               </li>
-              <li class="nav-item">
-                <a class="nav-link" href="orders.html">Orders</a>
+              <li class="nav-item dropdown d-none" id="dashboard-item">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Dashboard
+                </a>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="orders.html">Orders</a></li>
+                  <li><a class="dropdown-item" href="#" id="sign-out">Sign out</a></li>
+                </ul>
               </li>
             </ul>
             <input class="form-control w-25" id="search" type="search" placeholder="Search" aria-label="Search">
@@ -57,21 +63,10 @@
         </div>
     </nav>
 
-    <section class="filters py-3">
-        <div class="container d-md-flex justify-content-md-between">
-            <h3>Shop</h3>
-            <form action="#" id="filter-form">
-                <select name="filter" id="filter" class="form-control">
-                    <option value="asc" selected>asc</option>
-                    <option value="desc">desc</option>
-                </select>
-            </form>
-        </div>
-    </section>
 
-    <section class="products bg-light py-5">
+    <section class="orders bg-light py-5">
         <div class="container">
-            <div class="row" id="products">
+            <div class="table-responsive" id="orders-table">
             </div>
         </div>
     </section>
@@ -99,30 +94,59 @@
         </div>
     </footer>
 
+
     <script src="./assets/js/bootstrap.bundle.min.js"></script>
     <script type="module">
-        import {getProducts, searchProducts} from './modules/Products.js'
-        import getItemFromURL from './modules/Helpers.js'
-
-        const products_div = document.getElementById('products')
-        let keyword = getItemFromURL(document.URL, 'keyword')
-        const search_input = document.querySelector('#search')
+        import {getOrders} from './modules/Cart.js'
         
-        if(keyword !== null && keyword.length > 0) {
-            search_input.value = keyword
+        const search_input = document.querySelector('#search')
+        const signout_btn = document.querySelector('#sign-out')
+        const is_loggedin = localStorage.getItem('is_loggedin')
+        const dashboard_item = document.querySelector('#dashboard-item')
+
+        if(is_loggedin === null) {
+            dashboard_item.style.display = 'none'
+            alert('Please login to view your orders')
+        } else {
+            dashboard_item.style.display = 'block'
         }
 
-        console.log(keyword)
-        
-        if(keyword === null)
-            getProducts(products_div, {limit: null, sort: null})
-        else
-            searchProducts(products_div, keyword)
-    
+        const orders = getOrders().filter(order => order.user === localStorage.getItem('email'))
 
-        document.querySelector('select').addEventListener('change', (e) => {
-            getProducts(products_div, {limit: null, sort: e.target.value})
-        })
+        if(orders.length > 0) {
+            let orders_html = `
+            <table class="table table-bordered">
+                <tr>
+                    <th>Fullname</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Address</th>
+                    <th>Total</th>
+                </tr>
+            `
+
+            orders.forEach(item => {
+                orders_html += `
+                <tr>
+                    <td>${item.fullname}</td>
+                    <td>${item.email}</td>
+                    <td>${item.phone}</td>
+                    <td>${item.address}</td>
+                    <td>${item.total.toFixed(2)} EUR</td>
+                </td>
+                `
+            })
+
+            orders_html += '</table>'
+
+            document.querySelector('#orders-table').innerHTML = orders_html
+        } else {
+            const message = `
+                ${is_loggedin === null ? 'Please login first <a href="login.html">login link</a>' : ''}
+                ${(is_loggedin !== null && orders.length == 0) ? '0 Orders' : ''}
+            `
+            document.querySelector('#orders-table').innerHTML = message
+        }
 
         search_input.addEventListener('keyup', e => {
           e.preventDefault()
@@ -132,6 +156,13 @@
               window.location.href = `http://127.0.0.1:5500/shop.html?keyword=${e.target.value}`
               break
           }
+        })
+
+        signout_btn.addEventListener('click', e => {
+            e.preventDefault()
+            localStorage.removeItem('email')
+            localStorage.removeItem('is_loggedin')
+            window.location.href = 'index.html'
         })
     </script>
 </body>
